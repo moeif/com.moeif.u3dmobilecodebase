@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#define UnityAd
+using System.Collections;
 using UnityEngine;
 using System;
 
@@ -43,15 +44,15 @@ public class MoeAD : MonoBehaviour
 
     private void Start()
     {
-        MoeEventManager.Inst.RegisterEvent(EventID.OnSubscribeSuccess, this.OnEvent);
+        //MoeEventManager.Inst.RegisterEvent(EventID.OnSubscribeSuccess, this.OnEvent);
     }
 
     private void OnEvent(int eventId, MoeEventParam eParam)
     {
-        if(eventId == EventID.OnSubscribeSuccess)
-        {
-            SwitchAD(!ProAgent.Inst.IsProUser);
-        }
+        //if(eventId == EventID.OnSubscribeSuccess)
+        //{
+        //    SwitchAD(!ProAgent.Inst.IsProUser);
+        //}
     }
 
     public void Init()

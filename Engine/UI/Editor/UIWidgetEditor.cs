@@ -59,12 +59,20 @@ public class UIWidgetEditor : Editor
             CopyCode(sp_links);
         }
 
-        if (GUILayout.Button("Write Code To Base"))
+        if (panel.GetType().IsSubclassOf(typeof(UIPanel)))
         {
-            CopyCode(sp_links);
-            string className = panel.GetType().Name + "Base";
-            string scriptPath = Application.dataPath + "/Scripts/Logic/UI/PanelsBase/" + className + ".cs";
-            WriteCodeToBasePanel(scriptPath, className, GUIUtility.systemCopyBuffer);
+            if (GUILayout.Button("Write Code To Base"))
+            {
+                CopyCode(sp_links);
+                string className = panel.GetType().Name + "Base";
+                string panelBasePath = Application.dataPath + "/Scripts/Logic/UI/PanelsBase/";
+                if (!System.IO.Directory.Exists(panelBasePath))
+                {
+                    System.IO.Directory.CreateDirectory(panelBasePath);
+                }
+                string scriptPath = Application.dataPath + "/Scripts/Logic/UI/PanelsBase/" + className + ".cs";
+                WriteCodeToBasePanel(scriptPath, className, GUIUtility.systemCopyBuffer);
+            }
         }
 
         GameObject go = EditorGUILayout.ObjectField(new GUIContent("Add Widget"), null, typeof(GameObject), true) as GameObject;
@@ -114,7 +122,8 @@ public class UIWidgetEditor : Editor
         DrawDefaultInspector();
     }
 
-    private void CopyCode(SerializedProperty sp_links) {
+    private void CopyCode(SerializedProperty sp_links)
+    {
         // decl
         StringBuilder content = new StringBuilder();
 
@@ -162,7 +171,8 @@ public class UIWidgetEditor : Editor
         GUIUtility.systemCopyBuffer = content.ToString();
     }
 
-    private void WriteCodeToBasePanel(string scriptPath, string className, string codeStr) {
+    private void WriteCodeToBasePanel(string scriptPath, string className, string codeStr)
+    {
         Debug.Log(scriptPath);
         Debug.Log(className);
 

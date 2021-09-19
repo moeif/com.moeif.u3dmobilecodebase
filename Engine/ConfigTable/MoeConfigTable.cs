@@ -28,6 +28,7 @@ public class MoeConfigTable<T, V> : MonoBehaviour where T : MoeConfigTable<T, V>
         }
     }
 
+    public List<V> dataList = new List<V>();
     protected Dictionary<int, V> dataDict = new Dictionary<int, V>();
     private T config = null;
 
@@ -59,6 +60,7 @@ public class MoeConfigTable<T, V> : MonoBehaviour where T : MoeConfigTable<T, V>
         if (!dataDict.ContainsKey(id))
         {
             dataDict.Add(id, item);
+            dataList.Add(item);
         }
         else
         {

@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
-using UniRx.Async;
+// using UniRx.Async;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class MoeResManager : MoeSingleton<MoeResManager>
@@ -11,7 +11,7 @@ public class MoeResManager : MoeSingleton<MoeResManager>
 
     public void PreloadAssets(string[] assetsAddress, System.Action onDoneCallback)
     {
-        if(assetsAddress != null && assetsAddress.Length > 0)
+        if (assetsAddress != null && assetsAddress.Length > 0)
         {
             // TODO: Preload assets
         }
@@ -31,7 +31,7 @@ public class MoeResManager : MoeSingleton<MoeResManager>
         Addressables.LoadAssetsAsync<T>(address, callback);
     }
 
-    public async UniTask<T> LoadAssetAsync<T>(string address) where T : Object
+    public async Task<T> LoadAssetAsync<T>(string address) where T : Object
     {
         T asset = await Addressables.LoadAssetAsync<T>(address).Task;
         return asset;

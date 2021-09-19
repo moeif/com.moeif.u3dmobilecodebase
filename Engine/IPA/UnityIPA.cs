@@ -1,5 +1,5 @@
+#if UNITY_IPA
 #define SUBSCRIPTION_MANAGER
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -418,3 +418,4 @@ public class UnityIPA : IStoreListener
     }
 #endif
 }
+#endif

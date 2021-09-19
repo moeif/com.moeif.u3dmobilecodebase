@@ -3,12 +3,21 @@ using UnityEngine;
 using System;
 using Itenso.TimePeriod;
 using System.Text;
+using Newtonsoft.Json;
 
 public static class MoeUtils
 {
     public static readonly string[] DayOfWeek = new string[] { "日", "一", "二", "三", "四", "五", "六" };
 
     static System.Random rand = new System.Random();
+
+    public static long NowTimestamp
+    {
+        get
+        {
+            return GetNowTimestamp();
+        }
+    }
 
     public static string GetDayOfWeek(int dayOfWeek)
     {
@@ -49,13 +58,13 @@ public static class MoeUtils
         return _from.AddDays(addDays);
     }
 
-    public static void ShuffleArray<T>(T [] dataArray)
+    public static void ShuffleArray<T>(T[] dataArray)
     {
         //System.Random rand = new System.Random();
         if (dataArray != null && dataArray.Length > 2)
         {
             int last = dataArray.Length - 1;
-            for(int i = last; i >= 0; --i)
+            for (int i = last; i >= 0; --i)
             {
                 int selection = rand.Next(i + 1);
 
@@ -68,7 +77,7 @@ public static class MoeUtils
 
     public static void ShuffleList<T>(List<T> dataList)
     {
-        
+
         if (dataList != null && dataList.Count > 2)
         {
             int last = dataList.Count - 1;
@@ -86,7 +95,7 @@ public static class MoeUtils
     public static void DebugList<T>(List<T> dataList)
     {
         StringBuilder builder = new StringBuilder(1024);
-        for(int i = 0; i < dataList.Count; ++i)
+        for (int i = 0; i < dataList.Count; ++i)
         {
             builder.Append(dataList[i].ToString());
             builder.Append(", ");
@@ -94,6 +103,37 @@ public static class MoeUtils
 
         Debug.Log(builder.ToString());
     }
+
+    public static string ToJson(object obj)
+    {
+        return JsonConvert.SerializeObject(obj);
+    }
+
+    public static T FromJson<T>(string jsonStr)
+    {
+        try
+        {
+            return JsonConvert.DeserializeObject<T>(jsonStr);
+        }
+        catch
+        {
+            Debug.LogErrorFormat("Json 反序列化失败: {0} Type: {1}", jsonStr, typeof(T));
+        }
+
+        return default(T);
+    }
+
+    public static void SaveStrDataToLocal(string key, string data)
+    {
+        PlayerPrefs.SetString(key, data);
+    }
+
+    public static string LoadStrDataFromLocal(string key)
+    {
+        return PlayerPrefs.GetString(key);
+    }
+
+
 
     //public static string DateDiffNow(DateTime dt)
     //{

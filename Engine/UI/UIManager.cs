@@ -62,9 +62,9 @@ public class UIManager : MonoBehaviour
     {
         Inst = this;
 
-        if(layerConfigs != null)
+        if (layerConfigs != null)
         {
-            for(int i = 0; i < layerConfigs.Length; ++i)
+            for (int i = 0; i < layerConfigs.Length; ++i)
             {
                 if (!layerConfigDict.ContainsKey(layerConfigs[i].layer))
                 {
@@ -91,7 +91,7 @@ public class UIManager : MonoBehaviour
         public void ResetOrder(int sortingOrder)
         {
             this.sortingOrder = sortingOrder;
-            if(uiCanvas != null)
+            if (uiCanvas != null)
             {
                 uiCanvas.sortingOrder = this.sortingOrder;
             }
@@ -124,7 +124,7 @@ public class UIManager : MonoBehaviour
             this.signature = signature;
             bool dataDirty = true;
 
-            if(this.uiData != null && uiData != null && this.uiData.Equals(uiData))
+            if (this.uiData != null && uiData != null && this.uiData.Equals(uiData))
             {
                 dataDirty = false;
             }
@@ -154,7 +154,7 @@ public class UIManager : MonoBehaviour
 
         public void ActiveUI()
         {
-            if(uiPanel != null)
+            if (uiPanel != null)
             {
                 this.uiPanel.ActiveUI();
             }
@@ -195,7 +195,7 @@ public class UIManager : MonoBehaviour
     public static void OpenPanel(int uiKey, int signature = 1, object data = null)
     {
         Inst.OpenUI(uiKey, signature, data);
-    } 
+    }
 
     public void OpenUI(int uiKey, int signature = 1, object data = null)
     {
@@ -239,9 +239,9 @@ public class UIManager : MonoBehaviour
 
     public void CloseUI(int uiKey, int signature)
     {
-        for(int i = 0; i < uiQueue.Count; ++i)
+        for (int i = 0; i < uiQueue.Count; ++i)
         {
-            if(uiQueue[i].uiConfig.uiKey == uiKey && uiQueue[i].signature == signature)
+            if (uiQueue[i].uiConfig.uiKey == uiKey && uiQueue[i].signature == signature)
             {
                 UIQueueItem uqi = uiQueue[i];
                 uiQueue.RemoveAt(i);
@@ -253,18 +253,28 @@ public class UIManager : MonoBehaviour
         RefreshUIQueue();
     }
 
+    public void CloseAll()
+    {
+        for (int i = 0; i < uiQueue.Count; ++i)
+        {
+            GameObject.Destroy(uiQueue[i].uiPanel.gameObject);
+        }
+
+        uiQueue.Clear();
+    }
+
     public void CloseUI(int uiKey)
     {
-        for(int i = uiQueue.Count - 1; i >= 0; --i)
+        for (int i = uiQueue.Count - 1; i >= 0; --i)
         {
-            if(uiQueue[i].uiConfig.uiKey == uiKey)
+            if (uiQueue[i].uiConfig.uiKey == uiKey)
             {
                 UIQueueItem uqi = uiQueue[i];
                 uiQueue.RemoveAt(i);
                 GameObject.Destroy(uqi.uiPanel.gameObject);
             }
         }
-            
+
         RefreshUIQueue();
     }
 
@@ -340,13 +350,13 @@ public class UIManager : MonoBehaviour
         int sortingLayer = -1;
         if (layerConfigDict.ContainsKey(layer))
         {
-            sortingLayer = layerConfigDict[layer].startSortingLayer; 
+            sortingLayer = layerConfigDict[layer].startSortingLayer;
         }
 
-        for(int i = 0; i < uiQueue.Count; ++i)
+        for (int i = 0; i < uiQueue.Count; ++i)
         {
             UIQueueItem uqi = uiQueue[i];
-            if(uqi.uiConfig.uiLayer == layer)
+            if (uqi.uiConfig.uiLayer == layer)
             {
                 uqi.ResetOrder(sortingLayer++);
             }
@@ -356,9 +366,9 @@ public class UIManager : MonoBehaviour
     public int GetTopint(UILayer layer)
     {
         int topEnum = -1;
-        for(int i = 0; i < uiQueue.Count; ++i)
+        for (int i = 0; i < uiQueue.Count; ++i)
         {
-            if(uiQueue[i].uiConfig.uiLayer == layer)
+            if (uiQueue[i].uiConfig.uiLayer == layer)
             {
                 topEnum = uiQueue[i].uiConfig.uiKey;
             }
@@ -369,9 +379,9 @@ public class UIManager : MonoBehaviour
 
     public UIPanel GetPanel(int uiKey)
     {
-        for(int i = 0; i < uiQueue.Count; ++i)
+        for (int i = 0; i < uiQueue.Count; ++i)
         {
-            if(uiQueue[i].uiConfig.uiKey == uiKey && uiQueue[i].uiPanel != null)
+            if (uiQueue[i].uiConfig.uiKey == uiKey && uiQueue[i].uiPanel != null)
             {
                 return uiQueue[i].uiPanel;
             }
@@ -409,7 +419,7 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        if(index >= 0)
+        if (index >= 0)
         {
             return uiQueue[index].uiPanel;
         }
