@@ -6,10 +6,11 @@ using System.IO;
 
 public static class EngineSync
 {
+    const string codeBasePath = "/Users/fredshao/moeifstudio/projects/com.moeif.u3dmobilecodebase/Engine/";
+
     [MenuItem("MoeTools/ProjectEngine->Codebase")]
     static void EngineOut()
     {
-        string codeBasePath = "/Users/fredshao/moeifstudio/codebase/Engine/";
         if (Directory.Exists(codeBasePath))
         {
             Directory.Delete(codeBasePath, true);
@@ -24,9 +25,8 @@ public static class EngineSync
     [MenuItem("MoeTools/Codebase->ProjectEngine")]
     static void EngineIn()
     {
-        string codeBasePath = "/Users/fredshao/moeifstudio/codebase/Engine/";
         string projectEnginePath = Path.Combine(Application.dataPath, "ThirdParty/Engine/");
-        Directory.Delete(projectEnginePath);
+        Directory.Delete(projectEnginePath, true);
 
         DirectoryCopy(codeBasePath, projectEnginePath, true);
     }
