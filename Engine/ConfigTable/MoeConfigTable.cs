@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using global::FlatBuffers;
-
-public class MoeConfigTableBase : MonoBehaviour
+public class IMoeConfigTableBase
 {
     public virtual async Task LoadConfigTable()
     {
@@ -19,7 +18,7 @@ public class MoeConfigTableBase : MonoBehaviour
 /// <typeparam name="T">具体数据类</typeparam>
 /// <typeparam name="U">Flatbuffers 类型</typeparam>
 /// <typeparam name="V">逻辑数据类型</typeparam>
-public class MoeConfigTable<T, V> : MoeConfigTableBase where T : MoeConfigTable<T, V>
+public class MoeConfigTable<T, V> : IMoeConfigTableBase where T : MoeConfigTable<T, V>
 {
     private static T _inst = null;
     public static T Inst
@@ -28,18 +27,27 @@ public class MoeConfigTable<T, V> : MoeConfigTableBase where T : MoeConfigTable<
         {
             if (_inst == null)
             {
-                GameObject obj = new GameObject(typeof(T).Name);
-                DontDestroyOnLoad(obj);
-                _inst = obj.AddComponent<T>();
+                // GameObject obj = new GameObject(typeof(T).Name);
+                // DontDestroyOnLoad(obj);
+                // _inst = obj.AddComponent<T>();
+                var type = typeof(T);
+                _inst = System.Activator.CreateInstance<T>();
+                Debug.LogFormat("{0} Created!", typeof(T).Name);
             }
             return _inst;
         }
     }
 
+    public MoeConfigTable()
+    {
+        _inst = this as T;
+    }
+
+
+
     public List<V> dataList = new List<V>();
     protected Dictionary<int, V> dataDict = new Dictionary<int, V>();
     private T config = null;
-
 
     protected virtual string tableName
     {
