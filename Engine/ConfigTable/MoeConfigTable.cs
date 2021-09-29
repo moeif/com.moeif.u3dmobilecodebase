@@ -5,13 +5,21 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using global::FlatBuffers;
 
+public class MoeConfigTableBase : MonoBehaviour
+{
+    public virtual async Task LoadConfigTable()
+    {
+
+    }
+}
+
 /// <summary>
 /// 
 /// </summary>
 /// <typeparam name="T">具体数据类</typeparam>
 /// <typeparam name="U">Flatbuffers 类型</typeparam>
 /// <typeparam name="V">逻辑数据类型</typeparam>
-public class MoeConfigTable<T, V> : MonoBehaviour where T : MoeConfigTable<T, V>
+public class MoeConfigTable<T, V> : MoeConfigTableBase where T : MoeConfigTable<T, V>
 {
     private static T _inst = null;
     public static T Inst
@@ -68,7 +76,7 @@ public class MoeConfigTable<T, V> : MonoBehaviour where T : MoeConfigTable<T, V>
         }
     }
 
-    public async Task LoadConfigTable()
+    public override async Task LoadConfigTable()
     {
         TextAsset result = await Addressables.LoadAssetAsync<TextAsset>("ConfigBytes/" + tableName).Task;
         ByteBuffer buffer = new ByteBuffer(result.bytes);
@@ -106,7 +114,7 @@ public class MoeConfigTable<T, V> : MonoBehaviour where T : MoeConfigTable<T, V>
         return null;
     }
 
-    protected Vector2 ParseVector2(string str)
+    public Vector2 ParseVector2(string str)
     {
         if (!string.IsNullOrEmpty(str))
         {

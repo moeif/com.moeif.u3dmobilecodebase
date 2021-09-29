@@ -9,7 +9,7 @@ public class UnityADS : MoeAD, IUnityAdsInitializationListener, IUnityAdsLoadLis
     string _iOsGameId;
     bool _testMode = true;
     bool _enablePerPlacementMode = true;
-    private string _gameId;
+    public string gameId { get; private set; }
 
     const string iOSRewardedAdUnit = "Rewarded_iOS";
     const string AndroidRewardedUnit = "Rewarded_Android";
@@ -20,7 +20,7 @@ public class UnityADS : MoeAD, IUnityAdsInitializationListener, IUnityAdsLoadLis
     {
         get
         {
-            if(Application.platform == RuntimePlatform.IPhonePlayer)
+            if (Application.platform == RuntimePlatform.IPhonePlayer)
             {
                 return iOSRewardedAdUnit;
             }
@@ -40,12 +40,12 @@ public class UnityADS : MoeAD, IUnityAdsInitializationListener, IUnityAdsLoadLis
     {
         _iOsGameId = iosGameId;
         _androidGameId = androidGameId;
-        _gameId = (Application.platform == RuntimePlatform.IPhonePlayer)
+        gameId = (Application.platform == RuntimePlatform.IPhonePlayer)
             ? _iOsGameId
             : _androidGameId;
 
         _testMode = Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor;
-        Advertisement.Initialize(_gameId, _testMode, _enablePerPlacementMode, this);
+        Advertisement.Initialize(gameId, _testMode, _enablePerPlacementMode, this);
     }
 
     public void OnInitializationComplete()
@@ -139,7 +139,8 @@ public class UnityADS : MoeAD, IUnityAdsInitializationListener, IUnityAdsLoadLis
         RewardedAdCallback(false);
     }
 
-    public void OnUnityAdsShowStart(string adUnitId) {
+    public void OnUnityAdsShowStart(string adUnitId)
+    {
         Debug.LogFormat("广告开始播放!");
         LoadRewardedAd();
         MoeAnalyst.Inst.TrackEvent(string.Format("ADStarted_{0}", AppConfig.Inst.Lang));
