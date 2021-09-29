@@ -83,7 +83,7 @@ public class MoeAppBuildEditor : EditorWindow
         File.WriteAllText(path, versionText);
     }
 
-    
+
     private static EditorAppConfig LoadAppConfigs()
     {
         string path = System.IO.Path.Combine(Application.dataPath, "AppConfigs/AppConfig.json");
@@ -102,7 +102,7 @@ public class MoeAppBuildEditor : EditorWindow
 #endif
     }
 
-  
+
     private static string versionStr;
     public const int mainVersion = 1;
     public const int subVersion = 0;
@@ -113,7 +113,7 @@ public class MoeAppBuildEditor : EditorWindow
 
     private void OnGUI()
     {
-        if(eAppConfig == null)
+        if (eAppConfig == null)
         {
             GUILayout.Label("配置文件为空");
             return;
@@ -137,9 +137,9 @@ public class MoeAppBuildEditor : EditorWindow
         GUILayout.Space(50);
         EditorGUILayout.BeginVertical();
         GUILayout.Label("Android");
-        if(eAppConfig.Platforms.Android != null)
+        if (eAppConfig.Platforms.Android != null)
         {
-            for(int i = 0; i < eAppConfig.Platforms.Android.Count; ++i)
+            for (int i = 0; i < eAppConfig.Platforms.Android.Count; ++i)
             {
                 EditorAppConfigChannelInfo eChannelInfo = eAppConfig.Platforms.Android[i];
                 if (GUILayout.Button(eChannelInfo.ChannelName))
@@ -152,9 +152,9 @@ public class MoeAppBuildEditor : EditorWindow
 
         GUILayout.Space(20);
 
-        if(eAppConfig.Platforms.iOS != null)
+        if (eAppConfig.Platforms.iOS != null)
         {
-            for(int i = 0; i < eAppConfig.Platforms.iOS.Count; ++i)
+            for (int i = 0; i < eAppConfig.Platforms.iOS.Count; ++i)
             {
                 EditorAppConfigChannelInfo eChannelInfo = eAppConfig.Platforms.iOS[i];
                 if (GUILayout.Button(eChannelInfo.ChannelName))
@@ -165,14 +165,20 @@ public class MoeAppBuildEditor : EditorWindow
         }
         EditorGUILayout.EndVertical();
 
-        
+
     }
 
 
     private void BuildTarget(BuildTarget buildTarget, string channelName)
     {
-        // generate target platform appconfig json
+        // 尝试删除临时目录
+        string tmpGradleDir = Application.dataPath + "/../Temp/gradleOut";
+        if (Directory.Exists(tmpGradleDir))
+        {
+            Directory.Delete(tmpGradleDir, true);
+        }
 
+        // generate target platform appconfig json
         if (string.IsNullOrEmpty(versionStr))
         {
             Debug.LogError("请输入版本号");
@@ -207,23 +213,24 @@ public class MoeAppBuildEditor : EditorWindow
         appConfig.VERSION = versionStr;
         appConfig.CustomKey = eAppConfig.CommonInfo.CustomKey;
         appConfig.WriteConfig(configFileName);
-       
+
         AssetDatabase.Refresh();
 
         PlayerSettings.productName = appConfig.ProductName;
         PlayerSettings.applicationIdentifier = appConfig.BundleName;
         PlayerSettings.bundleVersion = versionStr;
 
-        if(buildTarget == UnityEditor.BuildTarget.Android)
+        if (buildTarget == UnityEditor.BuildTarget.Android)
         {
             int bundleVersionCode = 0;
-            if (!int.TryParse(androidBuildVersionCodeStr, out bundleVersionCode)) {
+            if (!int.TryParse(androidBuildVersionCodeStr, out bundleVersionCode))
+            {
                 Debug.LogFormat("Bundle Version Code 有问题！");
                 return;
             }
             else
             {
-                if(bundleVersionCode < 1)
+                if (bundleVersionCode < 1)
                 {
                     Debug.LogFormat("Bundle Version Code 有问题！");
                     return;
@@ -232,7 +239,7 @@ public class MoeAppBuildEditor : EditorWindow
 
             PlayerSettings.Android.bundleVersionCode = bundleVersionCode;
         }
-        
+
 
         workingChannelInfo = string.Format("正在编译渠道: {0}", appConfig.ChannelName);
 
@@ -248,17 +255,21 @@ public class MoeAppBuildEditor : EditorWindow
             //string[] versionStrArray = versionStr.Split('.');
             string projectPath = Application.dataPath.Replace("/Assets", "");
             PlayerSettings.Android.useCustomKeystore = true;
-            PlayerSettings.Android.keystoreName = "D:/Cloud/OneDrive/Moeif/Moeif/AndroidKeystore/moeif.jks";
+            PlayerSettings.Android.keystoreName = "/Users/fredshao/onedrive/Moeif/Moeif/AndroidKeystore/moeif.jks";
             PlayerSettings.Android.keystorePass = "962464";
             PlayerSettings.Android.keyaliasName = "moeif";
             PlayerSettings.Android.keyaliasPass = "962464";
 
             string targetDir = projectPath + "/AndroidAPK/";
+            if (!Directory.Exists(targetDir))
+            {
+                Directory.CreateDirectory(targetDir);
+            }
             string targetName = string.Format("{0}_{1}_{2}.apk", targetFilePrefixName, appConfig.ChannelName, versionStr);
             UnityEditor.Build.Reporting.BuildReport ret = BuildPipeline.BuildPlayer(GetBuildScenes(), targetDir + targetName, buildTarget, BuildOptions.None);
             EditorUtility.RevealInFinder(targetDir);
         }
-        else if(buildTarget == UnityEditor.BuildTarget.iOS)
+        else if (buildTarget == UnityEditor.BuildTarget.iOS)
         {
             UnityEditor.Build.Reporting.BuildReport ret = BuildPipeline.BuildPlayer(GetBuildScenes(), channelInfo.TargetPath, buildTarget, BuildOptions.None);
         }
@@ -289,11 +300,11 @@ public class MoeAppBuildEditor : EditorWindow
         string toPath = System.IO.Path.Combine(toDir, fileName);
         File.Copy(fromPath, toPath, true);
     }
-    
+
     private string[] GetBuildScenes()
     {
         List<string> sceneList = new List<string>();
-        foreach(EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
+        foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
         {
             sceneList.Add(scene.path);
         }
@@ -304,20 +315,20 @@ public class MoeAppBuildEditor : EditorWindow
     private EditorAppConfigChannelInfo GetChannelInfo(BuildTarget buildTarget, string channelName)
     {
         List<EditorAppConfigChannelInfo> channelInfoList = null;
-        if(buildTarget == UnityEditor.BuildTarget.Android)
+        if (buildTarget == UnityEditor.BuildTarget.Android)
         {
             channelInfoList = eAppConfig.Platforms.Android;
         }
-        else if(buildTarget == UnityEditor.BuildTarget.iOS)
+        else if (buildTarget == UnityEditor.BuildTarget.iOS)
         {
             channelInfoList = eAppConfig.Platforms.iOS;
         }
 
-        if(channelInfoList != null)
+        if (channelInfoList != null)
         {
-            foreach(EditorAppConfigChannelInfo info in channelInfoList)
+            foreach (EditorAppConfigChannelInfo info in channelInfoList)
             {
-                if(info.ChannelName == channelName)
+                if (info.ChannelName == channelName)
                 {
                     return info;
                 }
@@ -344,9 +355,9 @@ public class MoeAppBuildEditor : EditorWindow
         p.WaitForExit();
         p.Close();
 
-        foreach(string line in output.Split('\n'))
+        foreach (string line in output.Split('\n'))
         {
-            if(line.StartsWith("Revision: "))
+            if (line.StartsWith("Revision: "))
             {
                 string versionStr = line.Split(' ')[1].Trim();
                 svnVersion = int.Parse(versionStr);
