@@ -106,4 +106,27 @@ public class MoeConfigTable<T, V> : MonoBehaviour where T : MoeConfigTable<T, V>
         return null;
     }
 
+    protected Vector2 ParseVector2(string str)
+    {
+        if (!string.IsNullOrEmpty(str))
+        {
+            string[] strArray = str.Split(',');
+            if (strArray != null && strArray.Length > 0)
+            {
+                List<float> iDataList = new List<float>();
+                foreach (string strData in strArray)
+                {
+                    float faceId = -1;
+                    if (float.TryParse(strData, out faceId))
+                    {
+                        iDataList.Add(faceId);
+                    }
+                }
+                return new Vector2(iDataList[0], iDataList[1]);
+            }
+        }
+
+        return Vector2.zero;
+    }
+
 }
