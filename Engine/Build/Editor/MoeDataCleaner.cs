@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEditor;
+using System.IO;
+using System.Reflection;
+using System;
+using FlatBuffers;
 
 public class MoeDataCleaner
 {
@@ -12,6 +16,11 @@ public class MoeDataCleaner
         {
             System.IO.File.Delete(path);
         }
+
+        DirectoryInfo dInfo = new DirectoryInfo("./");
+        Debug.LogFormat("Dir: {0}", dInfo.FullName);
     }
+
+
 
 }

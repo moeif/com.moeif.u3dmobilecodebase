@@ -8,7 +8,7 @@ public class MoeAnalyst : MonoBehaviour
     {
         get
         {
-            if(_inst == null)
+            if (_inst == null)
             {
                 GameObject obj = new GameObject("MoeAnalyst");
                 DontDestroyOnLoad(obj);
@@ -23,7 +23,12 @@ public class MoeAnalyst : MonoBehaviour
         }
     }
 
-    public virtual void Init()
+    public void Init(MoeModuleData mmd)
+    {
+        OnInit(mmd);
+    }
+
+    protected virtual void OnInit(MoeModuleData mmd)
     {
 
     }
@@ -42,6 +47,6 @@ public class MoeAnalyst : MonoBehaviour
     {
 
     }
-    
+
 
 }

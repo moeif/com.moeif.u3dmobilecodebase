@@ -13,7 +13,7 @@ public class DynamicScrollViewCell : MonoBehaviour
 
     //public virtual void UpdateContent(int dataIndex)
     //{
-    
+
     //}
 
     public void SetRectTrans(RectTransform rectTrans)

@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using System;
 using UnityEngine;
 using System.Reflection;
-public class GameConfigTables
+public class MoeGameConfigTables
 {
     public static async Task InitTables()
     {

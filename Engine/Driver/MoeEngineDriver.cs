@@ -25,7 +25,7 @@ public class MoeEngineDriver : MoeSingleton<MoeEngineDriver>
         Debug.LogFormat("DataConfig Init");
         DataConfig.Inst.Init();
         Debug.LogFormat("MoeAnalyst Init");
-        MoeAnalyst.Inst.Init();
+        // MoeAnalyst.Inst.Init();
         //Debug.LogFormat("MoeAD Init");
         MoeAD.Inst.Init();
 
