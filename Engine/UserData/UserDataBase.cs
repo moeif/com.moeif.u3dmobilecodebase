@@ -40,71 +40,44 @@ public class UserDataBase
 {
     public static T LoadOrCreateLocalData<T>(string dataKey) where T : UserDataBase
     {
-        string jsonStr = MoeUtils.LoadStrDataFromLocal(dataKey);
-        if (!string.IsNullOrEmpty(jsonStr))
-        {
-            T data = MoeUtils.FromJson<T>(jsonStr);
-
-            if (data == null)
-            {
-                data = System.Activator.CreateInstance<T>();
-            }
-
-            return data;
-        }
-        else
+        T data = LoadLocalData<T>(dataKey);
+        if (data == null)
         {
             return System.Activator.CreateInstance<T>();
         }
+        else
+        {
+            return data;
+        }
+    }
+
+    public static T CreateInstance<T>() where T : UserDataBase
+    {
+        T data = System.Activator.CreateInstance<T>();
+        data.OnInstanceCreated();
+        return data;
+    }
+
+    public virtual void OnInstanceCreated()
+    {
+
     }
 
     public static T LoadLocalData<T>(string dataKey) where T : UserDataBase
     {
-        string jsonStr = MoeUtils.LoadStrDataFromLocal(dataKey);
-        if (!string.IsNullOrEmpty(jsonStr))
+        T data = MoeLocalSave.Load<T>(dataKey);
+        if (data != null)
         {
-            T data;
-            try
-            {
-                data = MoeUtils.FromJson<T>(jsonStr);
-                return data;
-            }
-            catch
-            {
-                Debug.LogErrorFormat("数据反序列化失败, dataKey: {0}", dataKey);
-                return null;
-            }
+            return data;
         }
         else
         {
-            return null;
+            Debug.LogFormat("本地数据加载失败: {0}", dataKey);
         }
-    }
+
+        return null;
 
 
-    public virtual void SaveInstanceToLocal(string dataKey)
-    {
-        if (!string.IsNullOrEmpty(dataKey))
-        {
-            string jsonStr = MoeUtils.ToJson(this);
-            PlayerPrefs.SetString(dataKey, jsonStr);
-        }
-        else
-        {
-            Debug.LogErrorFormat("DataKey is Empty!");
-        }
-    }
-
-    public static void SaveJsonToLocal(string dataKey, string jsonStr)
-    {
-        if (!string.IsNullOrEmpty(dataKey))
-        {
-            PlayerPrefs.SetString(dataKey, jsonStr);
-        }
-        else
-        {
-            Debug.LogErrorFormat("DataKey is Empty!");
-        }
     }
 
 }

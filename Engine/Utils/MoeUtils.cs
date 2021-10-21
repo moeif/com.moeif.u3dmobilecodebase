@@ -5,6 +5,10 @@ using Itenso.TimePeriod;
 using System.Text;
 using Newtonsoft.Json;
 
+#if UNITY_IOS
+using UnityEngine.iOS;
+#endif
+
 public static class MoeUtils
 {
     public static readonly string[] DayOfWeek = new string[] { "日", "一", "二", "三", "四", "五", "六" };
@@ -133,6 +137,37 @@ public static class MoeUtils
         return PlayerPrefs.GetString(key);
     }
 
+    public static bool IsChineseRegion()
+    {
+        // int hoursOffset = TimeZone.CurrentTimeZone.GetUtcOffset(System.DateTime.Now).Hours;
+        // Debug.LogFormat("Offset: {0}", hoursOffset);
+        // return false;
+
+        return Application.systemLanguage == SystemLanguage.Chinese || Application.systemLanguage == SystemLanguage.ChineseSimplified || Application.systemLanguage == SystemLanguage.ChineseTraditional;
+
+    }
+
+    public static bool IsiOS()
+    {
+        return Application.platform == RuntimePlatform.IPhonePlayer;
+    }
+
+    public static bool IsAndroid()
+    {
+        return Application.platform == RuntimePlatform.Android;
+    }
+
+    public static bool IsEditor()
+    {
+        return Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor;
+    }
+
+    public static void RequestRateApp()
+    {
+#if UNITY_IOS
+        Device.RequestStoreReview();
+#endif
+    }
 
 
     //public static string DateDiffNow(DateTime dt)

@@ -35,7 +35,7 @@ public class MoeHttpNetClient : MoeSingleton<MoeHttpNetClient>
         try
         {
             string jsonStr = JsonConvert.SerializeObject(postInfo);
-            var request = new HTTPRequest(new System.Uri(url), methodType: HTTPMethods.Put);
+            var request = new HTTPRequest(new System.Uri(url), methodType: HTTPMethods.Post);
             request.RawData = System.Text.Encoding.UTF8.GetBytes(jsonStr);
             request.AddHeader("Content-Type", "application/json");
             var response = await request.GetAsStringAsync();
@@ -47,6 +47,13 @@ public class MoeHttpNetClient : MoeSingleton<MoeHttpNetClient>
             UnityEngine.Debug.LogErrorFormat("反序列化网络数据失败: {0}", e.ToString());
             return default(R);
         }
+    }
+
+    public async UniTask<Texture2D> DownloadImage(string url)
+    {
+        var request = new HTTPRequest(new System.Uri(url), methodType: HTTPMethods.Get);
+        var response = await request.GetAsTexture2DAsync();
+        return response;
     }
 
 

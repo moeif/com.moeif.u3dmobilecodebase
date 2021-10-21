@@ -11,14 +11,23 @@ public class MoeDataCleaner
     [MenuItem("Build/CleanSavedData")]
     public static void CleanSavedData()
     {
-        string path = System.IO.Path.Combine(Application.persistentDataPath, "SaveFile.es3");
-        if (System.IO.File.Exists(path))
-        {
-            System.IO.File.Delete(path);
-        }
+        // string path = System.IO.Path.Combine(Application.persistentDataPath, "SaveFile.es3");
+        // if (System.IO.File.Exists(path))
+        // {
+        //     System.IO.File.Delete(path);
+        // }
 
-        DirectoryInfo dInfo = new DirectoryInfo("./");
-        Debug.LogFormat("Dir: {0}", dInfo.FullName);
+        // DirectoryInfo dInfo = new DirectoryInfo("./");
+        // Debug.LogFormat("Dir: {0}", dInfo.FullName);
+
+        // PlayerPrefs.DeleteAll();
+        MoeLocalSave.DeleteData();
+    }
+
+    [MenuItem("Build/ClearPlayerPrefs")]
+    public static void ClearPrefs()
+    {
+        PlayerPrefs.DeleteAll();
     }
 
 

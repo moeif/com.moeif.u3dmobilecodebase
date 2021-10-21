@@ -10,7 +10,7 @@ public class MoeAD : MonoBehaviour
     {
         get
         {
-            if(_inst == null)
+            if (_inst == null)
             {
                 GameObject obj = new GameObject("MoeAD");
                 DontDestroyOnLoad(obj);
@@ -18,20 +18,6 @@ public class MoeAD : MonoBehaviour
                 _inst = obj.AddComponent<GoogleAdmob>();
 #elif UnityAd
                 UnityADS uAds = obj.AddComponent<UnityADS>();
-                if (AppConfig.Inst.IsChinese)
-                {
-                    if (!string.IsNullOrEmpty(DataConfig.Inst.UnityGameIdiOS))
-                    {
-                        uAds.InitializeAds(DataConfig.Inst.UnityGameIdiOS, DataConfig.Inst.UnityGameIdAndroid);
-                    }
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(DataConfig.Inst.UnityGameIdiOSEn))
-                    {
-                        uAds.InitializeAds(DataConfig.Inst.UnityGameIdiOSEn, DataConfig.Inst.UnityGameIdAndroidEn);
-                    }
-                }
                 _inst = uAds;
 #else
                 _inst = obj.AddComponent<MoeAD>();
@@ -41,6 +27,15 @@ public class MoeAD : MonoBehaviour
         }
     }
 
+    public void Init(MoeModuleData mmd)
+    {
+        OnInit(mmd);
+    }
+
+    protected virtual void OnInit(MoeModuleData moeModuleData)
+    {
+
+    }
 
     private void Start()
     {

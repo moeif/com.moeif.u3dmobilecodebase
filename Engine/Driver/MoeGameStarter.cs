@@ -8,14 +8,23 @@ public class MoeGameStarter : MonoBehaviour
 {
     private void Awake()
     {
+        Application.targetFrameRate = 60;
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
         InitGame();
     }
 
     private async void InitGame()
     {
+#if UNITY_IOS
+        iOS14AppTracking.ShowAppTracking();
+#endif
+        Debug.LogFormat("初始化表");
         await MoeGameConfigTables.InitTables();
+        Debug.LogFormat("初始化EngineModule");
         await OnInitEngineModule();
+        Debug.LogFormat("初始化LogicModule");
         await OnInitLogicModule();
+        Debug.LogFormat("初始化 StartGameLogic");
         await OnStartGameLogic();
     }
 

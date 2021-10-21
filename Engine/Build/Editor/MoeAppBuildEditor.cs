@@ -12,6 +12,7 @@ public class EditorAppConfigCommonInfo
     public string CompanyName;
     public Dictionary<string, string> ProductNames;
     public string CustomKey;
+    public string GameIdentifier;
 }
 
 public class EditorAppConfigChannelInfo
@@ -206,6 +207,7 @@ public class MoeAppBuildEditor : EditorWindow
         EditorAppConfigChannelInfo channelInfo = GetChannelInfo(buildTarget, channelName);
         AppConfig appConfig = new AppConfig();
         appConfig.BundleName = string.IsNullOrEmpty(channelInfo.BundleName) ? eAppConfig.CommonInfo.BundleName : channelInfo.BundleName;
+        appConfig.GameIdentifier = eAppConfig.CommonInfo.GameIdentifier;
         appConfig.ProductName = eAppConfig.CommonInfo.ProductNames[channelInfo.Language];
         appConfig.Lang = channelInfo.Language;
         appConfig.ChannelName = channelName;
@@ -255,7 +257,7 @@ public class MoeAppBuildEditor : EditorWindow
             //string[] versionStrArray = versionStr.Split('.');
             string projectPath = Application.dataPath.Replace("/Assets", "");
             PlayerSettings.Android.useCustomKeystore = true;
-            PlayerSettings.Android.keystoreName = "/Users/fredshao/onedrive/Moeif/Moeif/AndroidKeystore/moeif.jks";
+            PlayerSettings.Android.keystoreName = "/Volumes/PortableSSD/Cloud/OneDrive/Moeif/Moeif/AndroidKeystore/moeif.jks";
             PlayerSettings.Android.keystorePass = "962464";
             PlayerSettings.Android.keyaliasName = "moeif";
             PlayerSettings.Android.keyaliasPass = "962464";

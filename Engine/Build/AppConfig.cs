@@ -2,14 +2,14 @@
 using System.Collections;
 using Newtonsoft.Json;
 
-public class AppConfig 
+public class AppConfig
 {
     private static AppConfig _inst = null;
     public static AppConfig Inst
     {
         get
         {
-            if(_inst == null)
+            if (_inst == null)
             {
                 _inst = LoadConfig();
             }
@@ -33,6 +33,8 @@ public class AppConfig
     public string Lang { get; set; }
 
     public string VERSION { get; set; }
+
+    public string GameIdentifier { get; set; }
 
     public bool IsChinese { get; private set; }
 
